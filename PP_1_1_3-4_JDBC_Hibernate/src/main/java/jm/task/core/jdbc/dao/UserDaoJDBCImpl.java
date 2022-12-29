@@ -8,75 +8,72 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private final Connection connection = Util.getConnection();
+
+    public UserDaoJDBCImpl() {
+
+    }
+
+    Connection connection = Util.getConnection();
 
     public void createUsersTable() {
-        String sql = "CREATE TABLE user(id BIGINT, name VARCHAR(45), lastname VARCHAR(45), age SMALLINT) VALUES(?, ?, ?))";
         try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate(sql);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            statement.executeUpdate("create table if not exist user"
+                    + "id bigint primary key auto_increment, name varchar (45), lastName(45), age smallint");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     public void dropUsersTable() {
-        try {
-            String sql = "DROP TABLE if EXISTS user";
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(sql);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate("drop table if exist user");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        String sql = "INSERT INTO user (name, lastname, age) VALUES (?, ?, ?)";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("insert into user(name, lastName, age)" +
+                " where(?,?,?)")) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
-            preparedStatement.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     public void removeUserById(long id) {
-        String sql = "delete from user where id = 1";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("delete from user where id=?")) {
             preparedStatement.setLong(1, id);
-            preparedStatement.executeUpdate();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
     public List<User> getAllUsers() {
-        List<User> allUsers = new ArrayList<>();
-        String sql = "select * from user";
-        try (Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery(sql);
-            while (resultSet.next()){
+
+        List<User> list = new ArrayList<>();
+        try (ResultSet resultSet = connection.createStatement().executeQuery("select * from user where id=?")) {
+            while (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getLong("id"));
                 user.setName(resultSet.getString("name"));
                 user.setLastName(resultSet.getString("lastName"));
                 user.setAge(resultSet.getByte("age"));
-                allUsers.add(user);
+                list.add(user);
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return allUsers;
+        return list;
     }
 
     public void cleanUsersTable() {
         try (Statement statement = connection.createStatement()) {
-            String sql = "TRUNCATE table user";
-            statement.executeUpdate(sql);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            statement.executeUpdate("truncate table user");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
-
