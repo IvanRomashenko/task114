@@ -9,8 +9,8 @@ import java.util.Properties;
 public class Util {
     final static String DRIVER = "com.mysql.cj.jdbc.Driver";
    // final static String DRIVER = "org.sql.Driver";
-    final static String URL = "jdbc:mysql://localhost:127.0.0.1:3306/pp144";
-    //final static String URL = "jdbc:mysql://localhost:3306/pp144";
+    //final static String URL = "jdbc:mysql://localhost:127.0.0.1:3306/pp144";
+    final static String URL = "jdbc:mysql://localhost:3306/pp114";
 
     final static String USERNAME = "root";
     final static String PASSWORD = "root";

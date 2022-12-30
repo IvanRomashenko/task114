@@ -17,8 +17,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void createUsersTable() {
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement()) {
-            statement.executeUpdate("create table if not exist user"
-                    + "id bigint primary key auto_increment, name varchar (45), lastName(45), age smallint");
+            statement.executeUpdate("create table if not exists user (id bigint primary key auto_increment, name varchar(45), lastName varchar(45), age smallint)");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -27,7 +26,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void dropUsersTable() {
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement()) {
-            statement.executeUpdate("drop table if exist user");
+            statement.executeUpdate("drop table if exists user");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -35,11 +34,11 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) {
         try (Connection connection = Util.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("insert into user(name, lastName, age)" +
-                     " where(?,?,?)")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("insert into user(name, lastName, age) where(?,?,?)")) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
+            System.out.println("User with name - " + name + " add to the database");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -58,7 +57,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
         List<User> list = new ArrayList<>();
         try (Connection connection = Util.getConnection();
-             ResultSet resultSet = connection.createStatement().executeQuery("select * from user where id=?")) {
+             ResultSet resultSet = connection.createStatement().executeQuery("select * from user")) {
             while (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getLong("id"));
