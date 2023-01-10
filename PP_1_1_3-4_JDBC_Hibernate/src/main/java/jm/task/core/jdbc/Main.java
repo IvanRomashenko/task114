@@ -20,6 +20,8 @@ public class Main {
         userService.saveUser(user4.getName(), user4.getLastName(), user4.getAge());
         userService.getAllUsers();
         userService.cleanUsersTable();
-//        userService.dropUsersTable();
+        userService.dropUsersTable();
+     //   userService.removeUserById(2);
+
     }
 }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-   // Connection connection = Util.getConnection();
+    // Connection connection = Util.getConnection();
 
     public UserDaoJDBCImpl() {
 
@@ -34,11 +34,13 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) {
         try (Connection connection = Util.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("insert into user(name, lastName, age) where(?,?,?)")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("insert into user(name, lastName, age) value(?,?,?)")) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
+            preparedStatement.executeUpdate();
             System.out.println("User with name - " + name + " add to the database");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -48,6 +50,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Connection connection = Util.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement("delete from user where id=?")) {
             preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
