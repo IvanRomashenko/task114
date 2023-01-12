@@ -19,9 +19,9 @@ public class Main {
         userService.saveUser(user3.getName(), user3.getLastName(), user3.getAge());
         userService.saveUser(user4.getName(), user4.getLastName(), user4.getAge());
         userService.getAllUsers();
+        userService.removeUserById(2);
         userService.cleanUsersTable();
         userService.dropUsersTable();
-     //   userService.removeUserById(2);
 
     }
 }

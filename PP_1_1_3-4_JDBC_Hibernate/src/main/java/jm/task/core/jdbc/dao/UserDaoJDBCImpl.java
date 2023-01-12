@@ -18,6 +18,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate("create table if not exists user (id bigint primary key auto_increment, name varchar(45), lastName varchar(45), age smallint)");
+            System.out.println("Table created");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -27,6 +28,7 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate("drop table if exists user");
+            System.out.println("Table delete");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -51,6 +53,7 @@ public class UserDaoJDBCImpl implements UserDao {
              PreparedStatement preparedStatement = connection.prepareStatement("delete from user where id=?")) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
+            System.out.println("User delete");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -68,6 +71,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 user.setLastName(resultSet.getString("lastName"));
                 user.setAge(resultSet.getByte("age"));
                 list.add(user);
+                System.out.println("Select all users");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -79,6 +83,8 @@ public class UserDaoJDBCImpl implements UserDao {
         try (Connection connection = Util.getConnection();
              Statement statement = connection.createStatement()) {
             statement.executeUpdate("truncate table user");
+            System.out.println("Table clean");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
